@@ -1,0 +1,12 @@
+sensor:
+  - platform: template
+    sensors:
+      umidita_del_suolo_stabile:
+        value_template: >
+          {% if states('sensor.mango_umidit_del_suolo') != 'unavailable' %}
+            {{ states('sensor.mango_umidit_del_suolo') }}
+          {% else %}
+            {{ states('sensor.umidita_del_suolo_stabile') }}
+          {% endif %}
+        friendly_name: "Umidità del Suolo Stabile"
+        unit_of_measurement: "%"
