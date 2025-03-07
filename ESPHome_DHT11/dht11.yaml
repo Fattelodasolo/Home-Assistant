@@ -1,0 +1,43 @@
+esphome:
+  name: dht11
+  friendly_name: DHT11
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+logger:
+
+api:
+  encryption:
+    key: "BqCRwaw/0RgwhHXyzGBO3iarMqOlYI2eig2H6HZUCjU="
+
+ota:
+  - platform: esphome
+    password: "b55ad4a669ee7c20692581cb11cbb7ad"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Dht11 Fallback Hotspot"
+    password: "nKpx6Bhr75jB"
+
+sensor:
+  - platform: dht
+    pin: GPIO4
+    temperature:
+      name: "Temperatura"
+      unit_of_measurement: "°C"
+      accuracy_decimals: 0
+    humidity:
+      name: "Umidità"
+      unit_of_measurement: "%"
+      accuracy_decimals: 0
+    update_interval: 2s
+
+captive_portal:
+    
