@@ -1,0 +1,49 @@
+esphome:
+  name: bmp280
+  friendly_name: BMP280
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+logger:
+
+api:
+  encryption:
+    key: "BOy4aTaxBr+9gCemH0Txfv7S5Cx1y42pOD7fyF08kLI="
+
+ota:
+  - platform: esphome
+    password: "4fe1480fd218cdbca6b8e218f7a2e2b3"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  ap:
+    ssid: "Bmp280 Fallback Hotspot"
+    password: "FZ2Sn7q2Uh5g"
+
+i2c:
+  sda: 4
+  scl: 0
+  scan: true
+  id: bus_i2c
+
+sensor:
+  - platform: bmp280_i2c
+    i2c_id: bus_i2c
+    address: 0x76  # Se non funziona, prova 0x77
+    temperature:
+      name: "Temperatura BMP280"
+      unit_of_measurement: "°C"
+      accuracy_decimals: 2
+    pressure:
+      name: "Pressione BMP280"
+      unit_of_measurement: "hPa"
+      accuracy_decimals: 2
+    update_interval: 2s
+
+captive_portal:
+    
