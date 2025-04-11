@@ -1,0 +1,46 @@
+esphome:
+  name: ccs811
+  friendly_name: CCS811
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+logger:
+
+api:
+  encryption:
+    key: "6sJALLng86YWZe3HWRGGeGzuNc1lOgbWy5TdmhYP1+s="
+
+captive_portal:
+
+ota:
+  - platform: esphome
+    password: "29f64951123f99bbc7853e7b1c5dfd4f"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+
+  ap:
+    ssid: "Ccs811 Fallback Hotspot"
+    password: "3vEHNIpDmBLB"
+
+
+i2c:
+  sda: 4
+  scl: 0
+  scan: true
+  id: bus_a
+
+sensor:
+  - platform: ccs811
+    eco2:
+      name: "eCO2"
+    tvoc:
+      name: "TVOC"
+    address: 0x5A
+    update_interval: 2s
+    
