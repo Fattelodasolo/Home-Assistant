@@ -1,0 +1,41 @@
+esphome:
+  name: bh1750
+  friendly_name: BH1750
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+logger:
+
+api:
+  encryption:
+    key: "Z3SBpsbm6CAs7L3zt/bG8KEfDoaVQr6NbH5wby7ojj8="
+
+ota:
+  - platform: esphome
+    password: "07cec48ea12a5e388860780e8d3601cb"
+
+captive_portal:
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  ap:
+    ssid: "Bh1750 Fallback Hotspot"
+    password: "crHfRjc4lJ45"
+
+i2c:
+  sda: 4
+  scl: 0
+  scan: true
+  id: bus_a
+
+sensor:
+  - platform: bh1750
+    name: "Luminosità"
+    address: 0x23
+    update_interval: 2s
+    i2c_id: bus_a
