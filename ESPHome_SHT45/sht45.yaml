@@ -1,0 +1,42 @@
+esphome:
+  name: sht45
+  friendly_name: SHT45
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+logger:
+
+api:
+  encryption:
+    key: "rxB2gPguP8PfwWynQXz/a1oJ+7nhJkx6xasEN1Q5Rew="
+
+ota:
+  - platform: esphome
+    password: "160f7c473b13281b3b69f78d96b7927c"
+
+captive_portal:
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  
+  ap:
+    ssid: "Sht45 Fallback Hotspot"
+    password: "a6zKfpxOsPBD"
+
+i2c:
+  sda: 4
+  scl: 0
+  scan: true
+
+sensor:
+  - platform: sht4x
+    temperature:
+      name: "Temperatura"
+    humidity:
+      name: "Umidità"
+    update_interval: 2s  
