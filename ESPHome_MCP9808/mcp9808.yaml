@@ -1,0 +1,40 @@
+esphome:
+  name: mcp9808
+  friendly_name: MCP9808
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+logger:
+
+api:
+  encryption:
+    key: "1fYwYTZjqzLCuY+OfUliKHvm88FGOMo5iUeyDbHako8="
+
+captive_portal:
+
+ota:
+  - platform: esphome
+    password: "e1876d51e0460683b4d6758fd69ff4be"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  ap:
+    ssid: "Mcp9808 Fallback Hotspot"
+    password: "PSUpmmJTZRlY"
+
+i2c:
+  sda: 4
+  scl: 0
+  scan: true
+  id: bus_a
+
+sensor:
+  - platform: mcp9808
+    name: "Temperatura MCP9808"
+    i2c_id: bus_a
+    update_interval: 2s
