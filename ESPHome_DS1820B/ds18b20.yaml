@@ -1,0 +1,37 @@
+esphome:
+  name: ds18b20
+  friendly_name: DS18B20
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+logger:
+
+api:
+  encryption:
+    key: "eiIiwh81rOZaKOZ0UChYsdL7zU/q1388+brMTNAgjSA="
+
+captive_portal:
+
+ota:
+  - platform: esphome
+    password: "0812af05da2a22eef7e79978fb26f429"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  ap:
+    ssid: "Ds18B20 Fallback Hotspot"
+    password: "hHc8OgjsGjCY"
+
+one_wire:
+  - platform: gpio
+    pin: GPIO4
+
+sensor:
+  - platform: dallas_temp
+    name: "Temperatura"
+    update_interval: 2s    
