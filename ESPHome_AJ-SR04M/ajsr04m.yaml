@@ -1,0 +1,35 @@
+esphome:
+  name: ajsr04m
+  friendly_name: AJ‑SR04M
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+logger:
+
+api:
+  encryption:
+    key: "14w2PTtZH0dPlHyIQ8mVkGOLYciIsW3DYZLNRfM6OYk="
+
+ota:
+  - platform: esphome
+    password: "7a341a03903e8387533f454cc310c2b0"
+
+captive_portal:
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  ap:
+    ssid: "Ajsr04M Fallback Hotspot"
+    password: "uGr2rtUahb0J"
+
+sensor:
+  - platform: ultrasonic
+    trigger_pin: GPIO0
+    echo_pin: GPIO4
+    name: "Distanza AJ-SR04M"
+    update_interval: 1s
