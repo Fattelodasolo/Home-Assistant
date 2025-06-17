@@ -1,0 +1,42 @@
+esphome:
+  name: oled
+  friendly_name: OLED
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+
+logger:
+
+api:
+  encryption:
+    key: "LIAEDvKEh24Qfr5E64FlAChRDwst4IBxdHYq4SHpM54="
+
+ota:
+  - platform: esphome
+    password: "1045d625c49976f481a366774eef7151"
+
+captive_portal:
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  ap:
+    ssid: "Oled Fallback Hotspot"
+    password: "TtNA0qNJtzdh"
+
+i2c:
+  sda: 4
+  scl: 0
+  scan: true
+  id: bus_a
+
+display:
+  - platform: ssd1306_i2c
+    model: "SSD1306 128x64"
+    address: 0x3C
+    lambda: |-
+      it.print(0, 0, "ciao");    
