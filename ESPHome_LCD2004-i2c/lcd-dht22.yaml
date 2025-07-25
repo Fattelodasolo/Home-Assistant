@@ -1,0 +1,58 @@
+esphome:
+  name: lcd
+  friendly_name: LCD
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+logger:
+
+api:
+  encryption:
+    key: "ReFbnDC05JxxJZVsb86EIQnaYrwBzL25AK+1/pgCgvY="
+
+ota:
+  - platform: esphome
+    password: "2f109b22b920691a02f9ec73d9c7516a"
+
+captive_portal:
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  ap:
+    ssid: "Lcd Fallback Hotspot"
+    password: "NGMso0wk9jQZ"
+
+i2c:
+  sda: GPIO21
+  scl: GPIO22
+  scan: true
+  id: bus_a
+
+display:
+  - platform: lcd_pcf8574
+    dimensions: 20x4
+    address: 0x27  # Modifica se necessario (può essere anche 0x3F)
+    update_interval: 1s
+    lambda: |-
+      it.print(0, 0, "Mini Stazione");
+      it.print(0, 1, "Temperatura:");
+      it.printf(12, 1, "%.1f C", id(temp_sensor).state);
+      it.print(0, 2, "Umidita':");
+      it.printf(12, 2, "%.1f %%", id(humidity_sensor).state);
+
+sensor:
+  - platform: dht
+    pin: GPIO4
+    temperature:
+      name: "Temperatura"
+      id: temp_sensor
+    humidity:
+      name: "Umidità"
+      id: humidity_sensor
+    model: DHT22
+    update_interval: 2s
