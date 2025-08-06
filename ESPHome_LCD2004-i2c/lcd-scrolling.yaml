@@ -29,7 +29,7 @@ wifi:
 
 i2c:
   sda: GPIO21
-  scl: GPIO23
+  scl: GPIO22
   scan: true
   id: bus_a
 
