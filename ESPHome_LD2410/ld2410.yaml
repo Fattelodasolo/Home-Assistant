@@ -1,0 +1,71 @@
+esphome:
+  name: ld2410
+  friendly_name: LD2410
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+logger:
+
+api:
+  encryption:
+    key: "0MetiVO4UYM07MzUISuH20D7cEUTD1LDH2v8OuTDBCU="
+
+ota:
+  - platform: esphome
+    password: "23cf3e9f780d6868b903642cbcd75c33"
+
+captive_portal:
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  ap:
+    ssid: "Ld2410 Fallback Hotspot"
+    password: "ScPEjUCPQ7o9"
+
+uart:
+  id: uart_ld2410
+  tx_pin: GPIO17  # ESP32 TX → LD2410 RX
+  rx_pin: GPIO16  # ESP32 RX → LD2410 TX
+  baud_rate: 256000
+  parity: NONE
+  stop_bits: 1
+
+ld2410:
+  uart_id: uart_ld2410
+
+sensor:
+  - platform: ld2410
+    moving_distance:
+      name: "Distanza movimento"
+    still_distance:
+      name: "Distanza statico"
+    moving_energy:
+      name: "Energia movimento"
+    still_energy:
+      name: "Energia statico"
+
+binary_sensor:
+  - platform: ld2410
+    has_target:
+      name: "Presenza rilevata"
+    has_moving_target:
+      name: "Movimento rilevato"
+    has_still_target:
+      name: "Presenza statica rilevata"
+
+text_sensor:
+  - platform: ld2410
+    version:
+      name: "Versione firmware LD2410"
+
+status_led:
+  pin: GPIO22 
+
+web_server:
+  port: 80
+    
