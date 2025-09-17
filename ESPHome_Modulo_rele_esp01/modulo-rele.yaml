@@ -1,0 +1,32 @@
+esphome:
+  name: modulo-rele
+  friendly_name: Modulo Relè
+
+esp8266:
+  board: esp01_1m
+
+logger:
+
+api:
+  encryption:
+    key: "N/9Me2taeVI7Zfo/MIQWn6BJfk0ojlmvgnvmmU/+vOI="
+
+ota:
+  - platform: esphome
+    password: "c4a97e724a76285c7aa9753f07b9a677"
+
+captive_portal:
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  ap:
+    ssid: "Modulo-Rele Fallback Hotspot"
+    password: "nqLrU2MpZkYY"
+
+switch:
+  - platform: gpio
+    name: "Relè Singolo"
+    pin: GPIO0
+    inverted: True
