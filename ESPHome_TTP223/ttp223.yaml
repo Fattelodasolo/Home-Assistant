@@ -1,0 +1,36 @@
+esphome:
+  name: ttp223
+  friendly_name: TTP223
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+logger:
+
+api:
+  encryption:
+    key: "abf6cQ/Y799f3acjZh+a1UJyaid3bK6rhuxNO9//oX8="
+
+ota:
+  - platform: esphome
+    password: "f7fc8b31874ae3f764b2badcd558f024"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  ap:
+    ssid: "Ttp223 Fallback Hotspot"
+    password: "gcCf0suPtHau"
+
+captive_portal:
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO14
+      mode: INPUT
+      inverted: False
+    name: "TTP223"
