@@ -1,0 +1,93 @@
+esphome:
+  name: igrometro
+  friendly_name: Igrometro
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "PVVHkXq5E5wFbmxE0yji5ALetCSbG8LQSM2SUuZ4h5w="
+
+ota:
+  - platform: esphome
+    password: "7c0e8eece8cfb0e2c832e99e34dd48c0"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Igrometro Fallback Hotspot"
+    password: "aqovithxwN4a"
+
+captive_portal:
+
+# --- Slider per calibrazione ---
+number:
+  - platform: template
+    name: "Igrometro - Bagnato (V)"
+    id: wet_value
+    optimistic: true
+    min_value: 0.0
+    max_value: 3.3
+    step: 0.01
+    initial_value: 0.45
+    restore_value: true
+    mode: box
+
+  - platform: template
+    name: "Igrometro - Asciutto (V)"
+    id: dry_value
+    optimistic: true
+    min_value: 0.0
+    max_value: 3.3
+    step: 0.01
+    initial_value: 2.40
+    restore_value: true
+    mode: box
+
+# --- Sensore ADC grezzo ---
+sensor:
+  - platform: adc
+    pin: GPIO34
+    attenuation: 11db
+    id: adc_raw
+    name: "Tensione grezza"
+    update_interval: 5s
+    accuracy_decimals: 3
+    unit_of_measurement: "V"
+
+  # Sensore calibrato in percentuale (0% = secco, 100% = bagnato)
+  - platform: template
+    name: "Umidità Suolo (%)"
+    id: calibrated_humidity
+    unit_of_measurement: "%"
+    accuracy_decimals: 1
+    update_interval: 5s
+    lambda: |-
+      float raw_v = id(adc_raw).state;
+      float wet_v = id(wet_value).state;
+      float dryv = id(dry_value).state;
+
+      // Valori di sicurezza se non inizializzati
+      if (isnan(wet_v)) wet_v = 0.45;
+      if (isnan(dry_v)) dry_v = 2.40;
+      if (fabs(dry_v - wet_v) < 0.0001) dry_v = wet_v + 0.0001;
+
+      // Calcolo percentuale normalizzata
+      float norm = (raw_v - wet_v) / (dry_v - wet_v);
+      if (norm < 0.0) norm = 0.0;
+      if (norm > 1.0) norm = 1.0;
+
+      // Inverti: 0% = secco, 100% = bagnato
+      float humidity = (1.0 - norm) * 100.0;
+
+      return humidity;
