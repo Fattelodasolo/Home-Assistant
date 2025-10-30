@@ -1,0 +1,57 @@
+esphome:
+  name: mpu6500
+  friendly_name: MPU6500
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+logger:
+
+api:
+  encryption:
+    key: "xsIXHOgmcWYfrM2x2EtpMYssUvKFPmXMWSZ+yqXr2JM="
+
+ota:
+  - platform: esphome
+    password: "9f2ab82c98391f501b16a51b90649531"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  ap:
+    ssid: "Mpu6500 Fallback Hotspot"
+    password: "xoaEzkdaKrA3"
+
+captive_portal:
+
+i2c:
+  sda: 21
+  scl: 22
+  scan: true
+  id: bus_a
+
+sensor:
+  - platform: mpu6050
+    address: 0x68
+    accel_x:
+      name: "MPU6500 Accelerazione X"
+      id: accel_x
+    accel_y:
+      name: "MPU6500 Accelerazione Y"
+      id: accel_y
+    accel_z:
+      name: "MPU6500 Accelerazione Z"
+      id: accel_z
+    gyro_x:
+      name: "MPU6500 Giroscopio X"
+      id: gyro_x
+    gyro_y:
+      name: "MPU6500 Giroscopio Y"
+      id: gyro_y
+    gyro_z:
+      name: "MPU6500 Giroscopio Z"
+      id: gyro_z
+    update_interval: 0.5s
