@@ -1,0 +1,71 @@
+esphome:
+  name: ens160
+  friendly_name: ENS160
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+logger:
+
+api:
+  encryption:
+    key: "dUu0mK8qCAjtQ1h0v3Ocngj9dmf4MblQo5cbjVK+BKs="
+
+ota:
+  - platform: esphome
+    password: "cc3a1ad98c443b287d4cb838a7cc002e"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  ap:
+    ssid: "Ens160 Fallback Hotspot"
+    password: "YJ4OQkv7AvXI"
+
+captive_portal:
+
+i2c:
+  sda: 21
+  scl: 22
+  scan: true
+
+sensor:
+  - platform: aht10
+    address: 0x38
+    temperature:
+      id: aht21_temperature
+      name: "Temperatura AHT21"
+    humidity:
+      id: aht21_humidity
+      name: "Umidità AHT21"
+    update_interval: 5s
+
+  - platform: ens160_i2c
+    address: 0x53
+    aqi:
+      id: ens160_air_quality_index
+      name: "ENS160 AQI"
+    tvoc:
+      name: "ENS160 TVOC"
+    eco2:
+      name: "ENS160 eCO2"
+    compensation:
+      temperature: aht21_temperature
+      humidity: aht21_humidity
+    update_interval: 5s
+
+text_sensor:
+  - platform: template
+    name: "Qualità Aria Valutazione"
+    lambda: |-
+      switch ( (int) (id(ens160_air_quality_index).state) ) {
+        case 1: return {"Eccellente"};
+        case 2: return {"Buona"};
+        case 3: return {"Moderata"};
+        case 4: return {"Scarsa"};
+        case 5: return {"Malsana"};
+        default: return {"Non rilevabile"};
+      }
