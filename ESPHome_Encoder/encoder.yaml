@@ -1,0 +1,56 @@
+esphome:
+  name: encoder
+  friendly_name: ENCODER
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+logger:
+
+api:
+  encryption:
+    key: "7MghfBS/Gj3nKORGIh2wzDaBuYr1TCludHejlAyNBMI="
+
+ota:
+  - platform: esphome
+    password: "8882f57f471d2f100e26f9c47fee2576"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  ap:
+    ssid: "Encoder Fallback Hotspot"
+    password: "ojrmeBRvkWHV"
+
+captive_portal:
+
+sensor:
+  - platform: rotary_encoder
+    name: "Encoder Rotativo"
+    id: encoder_rotativo
+    pin_a: 32
+    pin_b: 33
+    resolution: 4
+    min_value: 0
+    max_value: 100
+    on_value:
+      then:
+        - logger.log:
+            format: "Valore encoder: %.0f"
+            args: [ 'x' ]
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: 25
+      mode: INPUT_PULLUP
+      inverted: true
+    name: "Pulsante Encoder"
+    on_press:
+      then:
+        - sensor.rotary_encoder.set_value:
+            id: encoder_rotativo
+            value: 0
