@@ -1,0 +1,16 @@
+alias: NFC spegne luce studio
+description: ""
+triggers:
+  - entity_id:
+      - sensor.pn532_nfc_uid_string
+    trigger: state
+conditions:
+  - condition: template
+    value_template: "{{ trigger.to_state.state == 'DD-B1-6A-06' }}"
+actions:
+  - action: light.toggle
+    target:
+      entity_id:
+        - light.luce_studio_2
+    data: {}
+mode: single

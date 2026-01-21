@@ -1,0 +1,58 @@
+esphome:
+  name: pn532
+  friendly_name: PN532
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+logger:
+
+api:
+  encryption:
+    key: "IDbVOziTGFFrzuLGBOL2EE38QRvf2CIoMtWdWW2FJsc="
+
+ota:
+  - platform: esphome
+    password: "cdb75a18e409658b09de164ede237690"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  ap:
+    ssid: "Pn532 Fallback Hotspot"
+    password: "9g90t6HcymP7"
+
+captive_portal:
+
+i2c:
+  sda: GPIO21
+  scl: GPIO22
+  scan: true
+  frequency: 400kHz
+
+pn532_i2c:
+  id: nfc_module
+  update_interval: 1s
+
+  on_tag:
+    then:
+      - lambda: |-
+          id(nfc_uid_string).publish_state(x);
+      - logger.log:
+          format: "Tag NFC rilevato: %s"
+          args: ["x.c_str()"]
+
+  on_tag_removed:
+    then:
+      - lambda: |-
+          id(nfc_uid_string).publish_state("Nessun NFC");
+      - logger.log:
+          format: "Nessun NFC presente"
+
+text_sensor:
+  - platform: template
+    name: "NFC UID String"
+    id: nfc_uid_string
